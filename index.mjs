@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import { Octokit } from "@octokit/rest";
 import { parseComment } from "./helpers.mjs";
 
@@ -37,14 +38,11 @@ export async function fetchLinks() {
 }
 
 async function getLinks() {
-  const issues = await octokit.rest.issues.listComments({
-    ...defaultOptions,
-    issue_number: 1,
-  });
+  const issues = await fetch(`https://raw.githubusercontent.com/${defaultOptions.owner}/${defaultOptions.repo}/main/shortlinks.json`)
 
-  if (issues.status !== 200) return [];
+  if (!issues.ok && issues.status !== 200) return [];
 
-  return issues.data.map(parseComment).filter((valid) => !!valid);
+  return issues.json();
 }
 
 async function getLinkById(id) {
