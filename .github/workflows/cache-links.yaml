@@ -6,7 +6,7 @@ on:
       - created
 
 jobs:
-  cache-and-install:
+  generate-shortlinks:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,10 +43,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-  generate:
-    needs: cache-and-install
-
-    steps:
       - name: Generate shortlinks.json
         run: pnpm generate:shortlinks
 
